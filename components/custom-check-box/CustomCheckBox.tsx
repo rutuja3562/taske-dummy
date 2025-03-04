@@ -17,13 +17,13 @@ const CustomCheckBox = ({
       style={[
         styles.customCheckbox,
         {
-          backgroundColor: checked ? Color.Purple : Color.VeryLightGrey,
-          borderColor: checked ? Color.Purple : Color.LightGrey,
+          backgroundColor: checked ? Color.White : Color.White,
+          borderColor: checked ? "#6296FF" : Color.LightGrey,
           borderWidth: 1,
         },
       ]}
     >
-      {checked && <TickMark />}
+      {checked && <TickMark color={"#6296FF"} />}
     </TouchableOpacity>
   );
 };

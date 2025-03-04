@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Text } from "react-native";
-import { Color, Margin } from "@/assets/theme";
+import { BorderRadius, Color, Margin } from "@/assets/theme";
 import { InputPhoneNumber } from "@/components/input-phone-number/InputPhoneNumber";
 import { InputOtp } from "@/components/input-otp/InputOtp";
 import { InputPersonName } from "@/components/input-person-name/InputPersonName";
 import { InputTnC } from "@/components/input-tnc/InputTnC";
-import InputEntriesFromPhoneBook from "@/components/input-entries-from-phone-book/InputEntriesFromPhoneBook";
+import { InputEntriesFromPhoneBook } from "@/components/input-entries-from-phone-book/InputEntriesFromPhoneBook";
 import { InputImageFile } from "@/components/input-image-file/InputImageFile";
 import { InputDocFile } from "@/components/input-doc-file/InputDocFile";
 import { ViewDay } from "@/components/view-day/ViewDay";
@@ -15,18 +15,37 @@ import {
   getFirstDayOfPreviousMonth,
   getLastDayOfNextMonth,
 } from "@/utility-functions/utilities";
+import { OldInputProfessionsAndServices } from "@/components/input-profession-and-services/OldInputProfessionsAndServices";
+import { InputYearsAndMonth } from "@/components/input-years-and-month/InputYearsAndMonth";
+import { InputCountryCode } from "@/components/input-country-code/InputCountryCode";
+import Otp from "@/components/input-otp/Otp";
+
+import {
+  professionsAndServicesData,
+  vendorSchedule,
+  calendarReadyData,
+  servicesData,
+} from "@/components/input-profession-and-services/professionData";
+import InputProfessionsAndServices from "@/components/input-profession-and-services/InputProfessionsAndServices";
 
 export default function HomeScreen() {
+  // --------------------------------------------------------------------------------
   const [phoneValue, setPhoneValue] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
   const [nameValue, setNameValue] = useState("");
   const [otpValue, setOtpValue] = useState("");
+  const [years, setYears] = useState(0);
+  const [months, setMonths] = useState(0);
   const [selectedContacts, setSelectedContacts] = useState<
     { name: string; phone: string }[]
   >([]);
+
   const [uploadedImageFile, setUploadedImageFile] = useState<{
     fileName: string;
     fileUri: string;
   } | null>(null);
+
   const [uploadedDocFile, setUploadedDocFile] = useState<{
     fileName: string;
     fileUri: string;
@@ -34,91 +53,50 @@ export default function HomeScreen() {
 
   const [firstDayOfPreviousMonth, setFirstDayOfPreviousMonth] =
     useState<string>(getFirstDayOfPreviousMonth(new Date()));
+
   const [lastDayOfNextMonth, setLastDayOfNextMonth] = useState<string>(
     getLastDayOfNextMonth(new Date())
   );
+
   const [calendarMonth, setCalendarMonth] = useState<number>(
     new Date().getMonth()
   );
+
+  const [yearsOfExperience, setYearsOfExperience] = useState(0);
+
+  // ---------------------------------------------------------------------------
+
+  useEffect(() => {
+    // console.log("Updated selected contacts:", selectedContacts);
+  }, [selectedContacts]);
+
+  useEffect(() => {
+    // console.log("work experience:", years, " .", months);
+  }, [years, months]);
+
+  // ---------------------------------------------------------------------------
+
   // Handlers
-  const handlePhoneChange = (phone: string) => setPhoneValue(phone);
+
+  const handlePhoneChange = (phone: string) => {
+    setPhoneValue(phone);
+    // console.log("Phone changed to:", phone);
+  };
+
   const handleInputPersonChange = (name: string) => setNameValue(name);
+
   const handleInputOtpChange = (otp: string) => setOtpValue(otp);
+
   const handlePhoneFromPhoneBook = (
     contacts: { name: string; phone: string }[]
   ) => setSelectedContacts(contacts);
+
   const handleImageFileUploadSuccess = (fileName: string, fileUri: string) =>
     setUploadedImageFile({ fileName, fileUri });
+
   const handleDocFileUploadSuccess = (fileName: string, fileUri: string) =>
     setUploadedDocFile({ fileName, fileUri });
 
-  useEffect(() => {
-    console.log("Updated selected contacts:", selectedContacts);
-  }, [selectedContacts]);
-
-  const vendorSchedule = {
-    fromDate: "2024-12-01",
-    toDate: "2024-12-05",
-    vendorId: "v1",
-    dayAvailability: [
-      {
-        vendor: { id: "v1", name: "Virat" },
-        day: "sunday",
-        startTime: "09:00",
-        endTime: "11:00",
-      },
-      {
-        vendor: { id: "v1", name: "Virat" },
-        day: "sunday",
-        startTime: "14:00",
-        endTime: "16:00",
-      },
-      {
-        vendor: { id: "v1", name: "Virat" },
-        day: "monday",
-        startTime: "09:00",
-        endTime: "16:00",
-      },
-      {
-        vendor: { id: "v1", name: "Virat" },
-        day: "tuesday",
-        startTime: "12:00",
-        endTime: "16:00",
-      },
-      {
-        vendor: { id: "v1", name: "Virat" },
-        day: "wednesday",
-        startTime: "09:00",
-        endTime: "12:00",
-      },
-    ],
-    customAvailability: [
-      {
-        type: "available",
-        vendor: { id: "v1", name: "Virat" },
-        date: "2024-12-04",
-        startTime: "09:00",
-        endTime: "17:00",
-      },
-      {
-        type: "unavailable",
-        vendor: { id: "v1", name: "Virat" },
-        date: "2024-12-05",
-        startTime: "",
-        endTime: "",
-      },
-    ],
-    jobs: [
-      {
-        vendor: { id: "v1", name: "Virat" },
-        customer: { id: "c1", name: "Kirat" },
-        job: { id: "j1", name: "Wiring" },
-        date: "2024-12-02",
-        startTime: "14:00",
-        endTime: "15:00",
-      },
-    ],
-  };
   const handleClearPhone = () => {
     setPhoneValue("");
   };
@@ -132,15 +110,38 @@ export default function HomeScreen() {
     customAvailability: any,
     job: any
   ) => {
+    // console.log(
+    //   "standardAvailability",
+    //   standardAvailability,
+    //   "customAvailability",
+    //   customAvailability,
+    //   "job",
+    //   job
+    // );
+  };
+
+  const handleSaveProfessionAndServices = ({
+    services,
+    phone,
+    profession,
+    meta,
+  }: any) => {
     console.log(
-      "standardAvailability",
-      standardAvailability,
-      "customAvailability",
-      customAvailability,
-      "job",
-      job
+      "profession>>>",
+      profession,
+      "services>>>",
+      JSON.stringify(services)
     );
   };
+
+  const handleCountryCodeChange = () => {
+    setCountryCode(countryCode);
+  };
+
+  const handleFocusInput = () => {
+    setIsFocused(true);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -148,47 +149,67 @@ export default function HomeScreen() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={styles.inputContainer}>
-          <InputPhoneNumber
-            phoneValue={phoneValue}
-            onPhoneChange={handlePhoneChange}
-            clearPhone={handleClearPhone}
+          <Text>Select your Profession and services</Text>
+          {/* <OldInputProfessionsAndServices
+            data={servicesData}
+            onSaveProfessionAndServices={handleSaveProfessionAndServices}
+          /> */}
+          <InputProfessionsAndServices
+            professionsAndServicesData={professionsAndServicesData}
+            onProfessionAndServicesChange={handleSaveProfessionAndServices}
           />
         </View>
-        <View style={styles.inputContainer}>
+        {/* <View style={styles.inputContainer}>
+          <View style={styles.CountryCodeAndPhoneInputContainer}>
+            <InputCountryCode
+              setCountryCode={setCountryCode}
+              countryCode={countryCode}
+              onChangeountryCode={handleCountryCodeChange}
+              isFocused={isFocused}
+            />
+            <InputPhoneNumber
+              phoneValue={phoneValue}
+              onPhoneChange={handlePhoneChange}
+              clearPhone={handleClearPhone}
+              onFocusInput={handleFocusInput}
+              isFocused={isFocused}
+              setIsFocused={setIsFocused}
+            />
+          </View>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <InputOtp
             otpValue={otpValue}
             handleOtpChange={handleInputOtpChange}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <InputPersonName
             nameValue={nameValue}
             onNameChange={handleInputPersonChange}
             clearName={handleClearName}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <InputTnC
             text="By creating an account you agree to our"
             checkBoxText="Terms & Conditions"
           />
-        </View>
-
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <InputImageFile onUploadSuccess={handleImageFileUploadSuccess} />
-        </View>
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <InputDocFile onUploadSuccess={handleDocFileUploadSuccess} />
-        </View>
-
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <ViewDay
             date="2023-08-01"
             vendorId=""
             calendarReadyData={vendorSchedule}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <InputSchedule
             vendorId=""
             calendarReadyData={vendorSchedule}
@@ -196,11 +217,11 @@ export default function HomeScreen() {
             toDate=""
             onSaveScheduledCalenderData={handleSaveScheduledCalenderData}
           />
-        </View>
-        <View style={styles.inputContainer}>
+        </View> */}
+        {/* <View style={styles.inputContainer}>
           <ViewMonth
             vendorId=""
-            calendarReadyData={vendorSchedule}
+            calendarReadyData={calendarReadyData}
             fromDate=""
             toDate=""
             setFirstDayOfPreviousMonth={setFirstDayOfPreviousMonth}
@@ -216,7 +237,18 @@ export default function HomeScreen() {
               paddingHorizontal: 10, // Optional: add some horizontal padding
             }}
           />
+        </View> */}
+        {/* <View style={styles.inputContainer}>
+          <InputYearsAndMonth
+            setYears={setYears}
+            setMonths={setMonths}
+            years={years}
+            months={months}
+          />
         </View>
+        <View style={styles.inputContainer}>
+          <Otp />
+        </View> */}
       </ScrollView>
       {/* <View style={[styles.inputContainer, styles.inputContactContainer]}>
         <InputEntriesFromPhoneBook onImportPhone={handlePhoneFromPhoneBook} />
@@ -225,18 +257,22 @@ export default function HomeScreen() {
   );
 }
 
+// ------------------------------------------------------------------------------
+// Styles
+
 const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: Margin.InterElementsSpaceSmall,
-    marginHorizontal: 30,
-    //  Margin.InterElementsSpaceLarge,
+    marginHorizontal: Margin.InterElementsSpaceLarge,
+    // borderWidth: 1,
+  },
+  CountryCodeAndPhoneInputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: BorderRadius.countryCodeBorderRadius,
+    width: "100%",
   },
   container: { backgroundColor: Color.White },
   inputContactContainer: { height: 380 },
-  uploadedFileContainer: {
-    marginVertical: 10,
-    padding: 10,
-    backgroundColor: "#f0f0f0",
-    borderRadius: 8,
-  },
 });

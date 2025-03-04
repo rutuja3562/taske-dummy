@@ -1,25 +1,10 @@
 import React, { useEffect, useState } from "react";
-
 import { Text, View, ViewStyle } from "react-native";
 import { Calendar, DateData } from "react-native-calendars";
-import { SubHeader } from "../sub-header/SubHeader";
 import { Color, Font, Styles } from "@/assets/theme";
-// import SmallButtonOne from "../small-button-one/SmallButtonOne";
-// import {
-//   AvailabilityType,
-//   CalendarClientData_Ready,
-//   CalendarClientStates,
-//   loadCalendar,
-//   useCalendarClientData_Ready,
-//   useCalendarClientState,
-//   useIsCalendarClientState_Authorised,
-//   VendorCustomDayAvailability,
-//   VendorDayAvailability,
-// } from "@/actors/calendar-client";
-// import { getUserId } from "@/actors/auth-client";
-import LoadingSpinner from "../loading-spinner/LoadingSpinner";
 import {
   AvailabilityType,
+  CalendarClientData_Ready,
   getDatesForDays,
   reduceDatesToMarkedDatesFormat,
   VendorCustomDayAvailability,
@@ -33,7 +18,7 @@ interface ViewMonthProps {
   fromDate: string; // Optional property
   toDate: string; // Optional property
   vendorId: string; // Optional property
-  //   calendarReadyData: CalendarClientData_Ready | undefined;
+  // calendarReadyData: CalendarClientData_Ready | undefined;
   calendarReadyData: any;
   setFirstDayOfPreviousMonth: React.Dispatch<React.SetStateAction<string>>;
   setLastDayOfNextMonth: React.Dispatch<React.SetStateAction<string>>;
@@ -54,9 +39,6 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
   containerStyle,
 }) => {
   const router = useRouter();
-  //   const calendarClientState = useCalendarClientState();
-  // const calendarReadyData: any = useCalendarClientData_Ready();
-  // const calendarAuthorised = useIsCalendarClientState_Authorised();
 
   const [datesForNormalSchedule, setDatesForNormalSchedule] = useState<
     | {
@@ -69,11 +51,6 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
     | undefined
   >(undefined);
 
-  // useEffect(() => {
-  //   if (calendarAuthorised && fromDate && toDate && vendorId)
-  //     loadCalendar(fromDate, toDate, vendorId);
-  // }, [calendarAuthorised, fromDate, toDate, vendorId]);
-
   useEffect(() => {
     let datesForCalendarMapping: {
       [key: string]: {
@@ -82,6 +59,7 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
         selectedColor: string;
       };
     } = {};
+    // console.log("***", calendarReadyData);
     if (
       (calendarReadyData as any)?.vendorSchedule?.dayAvailability &&
       (calendarReadyData as any)?.vendorSchedule?.dayAvailability.length > 0
@@ -89,9 +67,12 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
       const dates = getDatesForDays(
         (calendarReadyData as any)?.vendorSchedule?.dayAvailability
       );
-      // alert(JSON.stringify(dates));
+      // alert("dates>>>" + JSON.stringify(dates));
+      console.log("dates>>>", dates);
       datesForCalendarMapping = reduceDatesToMarkedDatesFormat(dates);
-      // alert(JSON.stringify(datesForCalendarMapping));
+      // alert(
+      //   "datesForCalendarMapping>>>" + JSON.stringify(datesForCalendarMapping)
+      // );
     }
     if (
       (calendarReadyData as any)?.vendorSchedule?.customAvailability &&
@@ -128,6 +109,8 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
       });
     }
     setDatesForNormalSchedule(datesForCalendarMapping);
+    console.log("datesForNormalSchedule>>>", datesForNormalSchedule);
+    // alert("datesForNormalSchedule>>>" + JSON.stringify(datesForNormalSchedule));
   }, [calendarReadyData]);
 
   // alert(JSON.stringify(datesForNormalSchedule));
@@ -157,8 +140,6 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
   };
 
   const render = () => {
-    // switch (calendarClientState.state) {
-    //   case CalendarClientStates.Ready:
     return (
       <View
         style={[
@@ -193,23 +174,6 @@ export const ViewMonth: React.FC<ViewMonthProps> = ({
               //   });
             }
           }}
-          // markedDates={{
-          //   "2024-12-06": {
-          //     selected: true,
-          //     marked: true,
-          //     selectedColor: "#87CEFA", // Light blue for selected dates
-          //   },
-          //   "2024-12-09": {
-          //     selected: true,
-          //     marked: true,
-          //     selectedColor: "#87CEFA",
-          //   },
-          //   "2024-12-23": {
-          //     selected: true,
-          //     marked: true,
-          //     selectedColor: "#FFA07A", // Light orange for the other selected date
-          //   },
-          // }}
           markedDates={datesForNormalSchedule ?? {}}
           onMonthChange={handleMonthChange}
           theme={{

@@ -3,7 +3,7 @@ import { BorderRadius, Color, Font, FontSize, Padding } from "@/assets/theme";
 
 export const styles = StyleSheet.create({
   button: {
-    width: 130, // 25% bigger
+    minWidth: 130, // 25% bigger
     height: 40,
     borderRadius: BorderRadius.CommonBorderRadius,
     borderColor: Color.Purple,

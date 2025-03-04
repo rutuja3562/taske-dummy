@@ -7,20 +7,8 @@ import {
   View,
   TextInput,
 } from "react-native";
-import { Calendar } from "react-native-calendars";
 import { SubHeader } from "../../components/sub-header/SubHeader";
 import { Color, Font, Styles } from "@/assets/theme";
-import SmallButtonOne from "../../components/small-button-one/SmallButtonOne";
-// import {
-//   CalendarClientData_Ready,
-//   CalendarClientStates,
-//   loadCalendar,
-//   updateCalendar,
-//   useCalendarClientState,
-//   VendorCustomDayAvailability,
-//   VendorDayAvailability,
-// } from "@/actors/calendar-client";
-// import { getUserId } from "@/actors/auth-client";
 import LoadingSpinner from "../../components/loading-spinner/LoadingSpinner";
 import DownwardArrowIcon from "@/assets/svg-icons/DownwardArrowIcon";
 import { styles } from "./styles";
@@ -31,7 +19,6 @@ import DisabledIcon from "@/assets/svg-icons/DisableIcon";
 import CopyIcon from "@/assets/svg-icons/CopyIcon";
 import { useOnHardwareBackAction } from "@/utils/modulo-hooks";
 import { useRouter } from "expo-router";
-import HeaderOne from "@/components/header-one/HeaderOne";
 import {
   GestureHandlerRootView,
   ScrollView,
@@ -65,25 +52,10 @@ enum DayOfWeek {
   Saturday = "saturday",
 }
 
-// type VendorDayAvailability = {
-//   vendor?: any;
-//   day: DayOfWeek;
-//   startTime: string; // Format: hh:mm
-//   endTime: string;
-// };
-
 enum AvailabilityType {
   Available = "available",
   Unavailable = "unavailable",
 }
-
-// type VendorCustomDayAvailability = {
-//   type: string;
-//   vendor?: any;
-//   date: string;
-//   startTime: string; // Format: hh:mm
-//   endTime: string;
-// };
 
 const dayShortForms = (day: string) =>
   ({
@@ -160,57 +132,6 @@ const defaultVendorDayAvailability: Array<VendorDayAvailability> = [
     endTime: "17:00",
   },
 ];
-
-// const defaultVendorCustomDayAvailability: Array<VendorCustomDayAvailability> = [
-//   {
-//     type: AvailabilityType.Available,
-//     date: formatDate(new Date()),
-//     startTime: "09:00",
-//     endTime: "17:00",
-//   },
-// ];
-
-// --------------------------------------------------------------------
-// const mapVendorDayAvailabilityToDayAvailability = (
-//   input: Array<VendorDayAvailability>
-// ): Array<DayAvailability> => {
-
-//   const daysOfWeek: DayOfWeek[] = [
-//     DayOfWeek.Sunday,
-//     DayOfWeek.Monday,
-//     DayOfWeek.Tuesday,
-//     DayOfWeek.Wednesday,
-//     DayOfWeek.Thursday,
-//     DayOfWeek.Friday,
-//     DayOfWeek.Saturday,
-//   ];
-
-//   const dayAvailability: Array<DayAvailability> = daysOfWeek.map((day) => {
-//     // Find the availability for the current day from the input
-//     const availabilityForDay = input.filter((item) => item.day === day);
-
-//     // If there is availability for the day, create slots for each one
-//     const slots: Slot[] = availabilityForDay.map((availability) => ({
-//       id: generateSlotId(), // Generate unique ID for each slot
-//       startTime: availability.startTime,
-//       endTime: availability.endTime,
-//     }));
-
-//     // Assuming vendor is the same for all availability for a day
-//     const vendor =
-//       availabilityForDay.length > 0 ? availabilityForDay[0].vendor : null;
-
-//     return {
-//       day,
-//       slots,
-//       vendor,
-//     };
-//   });
-
-//   return dayAvailability;
-// };
-
-// --------------------------------------------------------------------
 
 const mapVendorDayAvailabilityToDayAvailability = (
   input: Array<VendorDayAvailability>
@@ -416,8 +337,6 @@ export const InputSchedule: React.FC<InputScheduleProps> = ({
 
   const [standardAvailability, setStandardAvailability] =
     useState<DayAvailability[]>();
-  // >(mapVendorDayAvailabilityToDayAvailability(defaultVendorDayAvailability));
-
   const [customAvailability, setCustomAvailability] =
     useState<CustomDayAvailability[]>();
   // mapVendorCustomDayAvailabilityToDayAvailability(
@@ -437,100 +356,6 @@ export const InputSchedule: React.FC<InputScheduleProps> = ({
       );
     }
   }, [calendarReadyData]);
-
-  //   useEffect(() => {
-  //     if (calendarReadyData) {
-  //       // Check if dayAvailability is empty
-  //       const defaultDayAvailability = [
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Monday",
-  //           startTime: "09:00",
-  //           endTime: "13:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Monday",
-  //           startTime: "14:00",
-  //           endTime: "18:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Tuesday",
-  //           startTime: "09:00",
-  //           endTime: "13:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Tuesday",
-  //           startTime: "14:00",
-  //           endTime: "18:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Wednesday",
-  //           startTime: "09:00",
-  //           endTime: "13:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Wednesday",
-  //           startTime: "14:00",
-  //           endTime: "18:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Thursday",
-  //           startTime: "09:00",
-  //           endTime: "13:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Thursday",
-  //           startTime: "14:00",
-  //           endTime: "18:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Friday",
-  //           startTime: "09:00",
-  //           endTime: "13:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Friday",
-  //           startTime: "14:00",
-  //           endTime: "18:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Saturday",
-  //           startTime: "09:00",
-  //           endTime: "13:00",
-  //         },
-  //         {
-  //           vendor: { id: vendorId, name: "Virat" },
-  //           day: "Saturday",
-  //           startTime: "14:00",
-  //           endTime: "18:00",
-  //         },
-  //       ];
-
-  //       setStandardAvailability(
-  //         mapVendorDayAvailabilityToDayAvailability(
-  //           calendarReadyData?.dayAvailability.length > 0
-  //             ? calendarReadyData.dayAvailability
-  //             : defaultDayAvailability
-  //         )
-  //       );
-
-  //       setCustomAvailability(
-  //         mapVendorCustomDayAvailabilityToDayAvailability(
-  //           calendarReadyData?.customAvailability
-  //         )
-  //       );
-  //     }
-  //   }, [calendarReadyData]);
 
   const addStandardSlot = (day: string): void => {
     setStandardAvailability((prev) =>
@@ -1105,7 +930,6 @@ export const InputSchedule: React.FC<InputScheduleProps> = ({
   return (
     <GestureHandlerRootView style={[styles.inputScheduleContainer]}>
       <View style={styles.addEditHeaderContainer}>
-        {/* <HeaderOne onLeftIconPress={goBack} title="" /> */}
         <SubHeader title="Update Availability" />
       </View>
       <ScrollView style={[styles.container]}>
@@ -1143,27 +967,6 @@ export const InputSchedule: React.FC<InputScheduleProps> = ({
             jobs
           );
         }}
-        // onButtonPress={() => {
-        //   const dayAvailabilities = mapDayAvailabilityToVendorDayAvailability(
-        //     standardAvailability ?? []
-        //   );
-        //   const customDayAvailabilities =
-        //     mapDayAvailabilityToVendorCustomDayAvailability(
-        //       customAvailability ?? []
-        //     );
-        //   const jobs = calendarReadyData?.jobs;
-
-        //     updateCalendar(
-        //       fromDate,
-        //       toDate,
-        //       vendorId,
-        //       dayAvailabilities,
-        //       customDayAvailabilities,
-        //       jobs
-        //     );
-        //   // alert("Change a date's availability button pressed!");
-        //   router.back();
-        // }}
       />
     </GestureHandlerRootView>
   );

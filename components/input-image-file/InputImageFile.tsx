@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Alert } from "react-native";
-import LargeButton from "../large-button/LargeButton";
 import { sendFileToServerForProcess } from "@/utility-functions/utilities";
 import * as DocumentPicker from "expo-document-picker";
+import LargeButtonOne from "../large-button-one/LargeButtonOne";
 
 interface InputImageFileProps {
   onUploadSuccess: (fileName: string, fileUri: string) => void;
@@ -51,7 +51,7 @@ export const InputImageFile: React.FC<InputImageFileProps> = ({
 
   return (
     <View>
-      <LargeButton
+      <LargeButtonOne
         onButtonPress={() => handleDocumentUpload("docId")}
         buttonText="Add Image"
         disabled={false}

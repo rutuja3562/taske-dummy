@@ -9,10 +9,8 @@ export enum Color {
   DarkGrey = "#818EAB",
   VeryDarkGrey = "#535252",
   // DarkGray = "#333",
-  // Purple = "#5B67F1",
-  Purple = "#FE467D",
-  LightPurple = "#FF80D0",
-  // LightPurple = "#AFB4F8",
+  Purple = "#5B67F1",
+  LightPurple = "#AFB4F8",
   Blue = "#25C7E8",
   Cyan = "#4B96F9",
   Orange = "#FFB286",
@@ -20,7 +18,7 @@ export enum Color {
   // CheckBoxBorder = "#DFE0E7",
   // CheckBoxUncheckedFill = "#F5F5FF",
   // countryCodeBackground = "#E9E9FF",
-  // Red = "red",
+  Red = "red",
   // HelpText = "#6f6f6f",
   // InvalidPurple = "#CBCFFF",
   // SmokyGray = "#8A898F",
@@ -70,10 +68,7 @@ export enum FontSize {
 // export enum Padding {
 //   containerPadding = 15,
 // }
-export enum Padding {
-  InterElementsSpaceSmall = 10, // Check
-  InterElementsSpaceLarge = 15,
-}
+
 export enum Margin {
   Gutter = 10,
   InterElementsSpaceSmall = 10, // Check
@@ -139,7 +134,7 @@ export enum ButtonShadow {
 export enum Font {
   // Black = "Black",
   // BlackItalic = "BlackItalic",
-  // Bold = "Bold",
+  Bold = "Bold",
   // BoldItalic = "BoldItalic",
   // ExtraBold = "ExtraBold",
   // ExtraBoldItalic = "ExtraBoldItalic",
@@ -183,16 +178,12 @@ export const Styles = StyleSheet.create({
     opacity: 0.8,
   },
   screen: {
-    // marginTop: 50,
-    // marginBottom: 10,
     paddingLeft: Margin.ScreenLeftRightMargin,
     paddingRight: Margin.ScreenLeftRightMargin,
     flex: 1,
     backgroundColor: Color.White,
-
     // overflow: "visible", // Ensure shadow is not cut off
   },
-
   screenNoMargin: {
     flex: 1,
     backgroundColor: Color.White,
@@ -208,7 +199,6 @@ export const Styles = StyleSheet.create({
   mobileWidth: {
     maxWidth: 500,
   },
-
   scrollViewStyle: {
     marginRight: -Margin.ScreenLeftRightMargin,
     marginLeft: -Margin.ScreenLeftRightMargin,

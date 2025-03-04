@@ -5,6 +5,7 @@
     "module": "commonjs",
     "jsx": "react", // or "react-jsx"
     "strict": true,
+    "types": ["react", "react-native"],
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,7 +13,7 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
   },
   "include": [
     "**/*.ts",

@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     alignItems: "center",
-    marginTop: Margin.WidgetHeaderToWidgetElements,
   },
   button: {
     backgroundColor: Color.Purple,

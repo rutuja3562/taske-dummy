@@ -39,6 +39,16 @@ export type VendorDayAvailability = {
   endTime: string;
 };
 
+export type JobSchedule = {
+  id: string;
+  vendor: Vendor;
+  customer: Customer;
+  job: any;
+  date: Date;
+  startTime: string;
+  endTime: string;
+};
+
 export type VendorCustomDayAvailability = {
   id?: string;
   type: AvailabilityType;
@@ -47,6 +57,17 @@ export type VendorCustomDayAvailability = {
   date: string;
   startTime?: string;
   endTime?: string;
+};
+
+// --------------------------------------------------------------------------------------------
+
+export type CalendarClientData_Ready = {
+  fromDate: Date;
+  toDate: Date;
+  vendorId: string;
+  dayAvailability: Array<VendorDayAvailability>;
+  customAvailability: Array<VendorCustomDayAvailability>;
+  jobs: Array<JobSchedule>;
 };
 
 // --------------------------------------------------------------------------------------------
@@ -201,7 +222,6 @@ export function removePdfExtension(str: string) {
 export function getDatesForDays(
   dayAvailability: VendorDayAvailability[]
 ): string[] {
-  // Map days of the week to their corresponding index (0 = Sunday, ..., 6 = Saturday)
   const dayMapping: { [key: string]: number } = {
     sunday: 0,
     monday: 1,
@@ -212,28 +232,25 @@ export function getDatesForDays(
     saturday: 6,
   };
 
-  // Extract the days to filter from the dayAvailability array
   const targetDays = dayAvailability.map(
     (item) => dayMapping[item?.day?.toLowerCase() as keyof typeof dayMapping]
   );
 
-  // Initialize an array to store the result dates
   const resultDates: string[] = [];
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = today.getMonth();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  // Loop through all days in December 2024
-  const year = new Date().getFullYear();
-  const month = new Date().getMonth(); // Current month (0-based index for months)
-  const daysInMonth = new Date(year, month + 1, 0).getDate(); // Get the number of days in December
+  for (let day = today.getDate(); day <= daysInMonth; day++) {
+    const date = new Date(Date.UTC(year, month, day));
+    const dayOfWeek = date.getUTCDay();
 
-  for (let day = 1; day <= daysInMonth; day++) {
-    const date = new Date(Date.UTC(year, month, day)); // Create date in UTC
-    const dayOfWeek = date.getUTCDay(); // Get the day of the week in UTC
-
-    // Check if the current day of the week is in the targetDays
     if (targetDays.includes(dayOfWeek)) {
-      resultDates.push(date.toISOString().split("T")[0]); // Format as YYYY-MM-DD
+      resultDates.push(date.toISOString().split("T")[0]);
     }
   }
+
   return resultDates;
 }
 
